@@ -1,23 +1,36 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { HeroesService, Heroe } from '../../servicios/heroes.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-heroes',
-  templateUrl: './heroes.component.html',
-  styleUrls: ['./heroes.component.css']
+  templateUrl: './heroes.component.html'
 })
 export class HeroesComponent implements OnInit {
 
 
-  heroes: Heroe[] = [];
-  constructor( private _heroesService: HeroesService ) {
-    console.log('Constructor');
+  @Input() heroes: Heroe[] = [];
+  @Input() buscador: boolean;
+  constructor( private _heroesService: HeroesService,
+               private router: Router ) {
+    /* console.log('Constructor'); */
+    this.buscador = false;
   }
 
   ngOnInit() {
-    console.log('ngOnInit');
-    this.heroes = this._heroesService.getHeroes();
-    console.log( this.heroes );
+    /* console.log('ngOnInit'); */
+    if (!this.buscador) {
+      this.heroes = this._heroesService.getHeroes();
+    }
+    /* console.log( this.heroes ); */
+  }
+
+  verHeroe(idx: number) {
+    if ( this.buscador) {
+      this.router.navigate( [ '/heroe', this.heroes[idx].idx ]);
+    } else {
+      this.router.navigate( [ '/heroe', idx ]);
+    }
   }
 
 }
